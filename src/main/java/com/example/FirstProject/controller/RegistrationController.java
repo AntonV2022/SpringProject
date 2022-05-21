@@ -1,6 +1,5 @@
 package com.example.FirstProject.controller;
 
-
 import com.example.FirstProject.domain.User;
 import com.example.FirstProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.Map;
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserService userSevice;
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration() {
@@ -24,7 +23,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
-        if (!userSevice.addUser(user)) {
+        if (!userService.addUser(user)) {
             model.put("message", "User exists!");
             return "registration";
         }
@@ -34,10 +33,10 @@ public class RegistrationController {
 
     @GetMapping("/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
-        boolean isActivated = userSevice.activateUser(code);
+        boolean isActivated = userService.activateUser(code);
 
         if (isActivated) {
-            model.addAttribute("message", "Пользователь успешно активирован!");
+            model.addAttribute("message", "User successfully activated");
         } else {
             model.addAttribute("message", "Activation code is not found!");
         }

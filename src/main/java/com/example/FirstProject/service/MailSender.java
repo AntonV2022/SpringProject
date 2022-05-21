@@ -1,6 +1,5 @@
 package com.example.FirstProject.service;
 
-import com.example.FirstProject.domain.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
