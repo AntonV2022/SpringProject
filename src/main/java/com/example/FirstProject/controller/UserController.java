@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -41,10 +40,8 @@ public class UserController {
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user
-    ) {
+            @RequestParam("userId") User user) {
         userService.saveUser(user, username, form);
-
         return "redirect:/user";
     }
 
@@ -52,7 +49,6 @@ public class UserController {
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
-
         return "profile";
     }
 
@@ -60,10 +56,8 @@ public class UserController {
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String password,
-            @RequestParam String email
-    ) {
+            @RequestParam String email) {
         userService.updateProfile(user, password, email);
-
         return "redirect:/user/profile";
     }
 }

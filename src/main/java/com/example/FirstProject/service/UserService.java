@@ -17,13 +17,16 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
-
     @Autowired
     private MailSender mailSender;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Пользователь не найден!");
+        }
+        return user;
     }
 
     public boolean addUser(User user) {
@@ -38,9 +41,7 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(UUID.randomUUID().toString());
 
         userRepo.save(user);
-
         sendMessage(user);
-
         return true;
     }
 
@@ -52,7 +53,6 @@ public class UserService implements UserDetailsService {
                     user.getUsername(),
                     user.getActivationCode()
             );
-
             mailSender.send(user.getEmail(), "Activation code", message);
         }
     }
@@ -65,9 +65,7 @@ public class UserService implements UserDetailsService {
         }
 
         user.setActivationCode(null);
-
         userRepo.save(user);
-
         return true;
     }
 
@@ -89,7 +87,6 @@ public class UserService implements UserDetailsService {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
-
         userRepo.save(user);
     }
 
@@ -106,13 +103,10 @@ public class UserService implements UserDetailsService {
                 user.setActivationCode(UUID.randomUUID().toString());
             }
         }
-
         if (!StringUtils.isEmpty(password)) {
             user.setPassword(password);
         }
-
         userRepo.save(user);
-
         if (isEmailChanged) {
             sendMessage(user);
         }

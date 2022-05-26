@@ -1,6 +1,9 @@
 package com.example.FirstProject.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
@@ -9,7 +12,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Пожалуйста, заполните это поле.")
+    @Length(max = 2048, message = "Текст сообщения слишком длинный.")
     private String text;
+    @Length(max = 255, message = "Текст сообщения слишком длинный.")
     private String tag;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
